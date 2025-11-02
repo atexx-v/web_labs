@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html lang="uk">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Взуття — View Page</title>
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+
+  <header class="header">
+    <div class="logo">SHOES FOR USE</div>
+    <nav class="nav">
+      <a href="index.html">Головна</a>
+      <a href="create.html">Додати взуття</a>
+    </nav>
+  </header>
+
+  <main>
+    <div class="controls">
+      <input type="text" id="searchInput" placeholder="Пошук...">
+      <select id="sortSelect">
+       <option value="">Сортувати...</option>
+       <option value="price">Ціна</option>
+        <option value="size">Розмір</option>
+        <option value="manufacturer">Назва виробника</option>
+      </select>
+      <button id="countButton">Порахувати загальну вартість</button>
+    </div>
+
+    <div id="shoeList" class="shoe-list"></div>
+
+    <p id="totalPrice" class="total"></p>
+  </main>
+
+  <footer class="footer">
+    <p>Каталог взуття</p>
+    <p>vishnevskiy721@gmail.com     +380 688 535 796</p>
+  </footer>
+
+  <script src="script.js"></script>
+</body>
+</html>

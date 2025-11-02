@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html lang="uk">
+<head>
+  <meta charset="UTF-8">
+  <title>Додати взуття</title>
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+  <header class="header">
+    <div class="logo">SHOES FOR USE</div>
+    <nav class="nav">
+      <a href="index.html">Головна</a>
+    </nav>
+  </header>
+  <main>
+    <h1>Додати нове взуття</h1>
+    <form id="createForm" class="form-container">
+      <label>Виробник:
+        <input type="text" id="manufacturer" required minlength="2" maxlength="40">
+      </label>
+      <label>Ціна (грн):
+        <input type="number" id="price" required min="100" max="20000">
+      </label>
+      <label>Розмір:
+        <input type="number" id="size" required min="35" max="48">
+      </label>
+      <label>Колір:
+        <input type="text" id="color" required>
+      </label>
+      <label>URL зображення:
+        <input type="url" id="image" required placeholder="https://...">
+      </label>
+      <button type="submit">Додати</button>
+    </form>
+  </main>
+  <script>
+    document.getElementById("createForm").addEventListener("submit", (e) => {
+      e.preventDefault();
+      let shoes = JSON.parse(localStorage.getItem("shoes")) || [];
+
+      const newShoe = {
+        manufacturer: document.getElementById("manufacturer").value,
+        price: +document.getElementById("price").value,
+        size: +document.getElementById("size").value,
+        color: document.getElementById("color").value,
+        image: document.getElementById("image").value
+      };
+
+      shoes.push(newShoe);
+      localStorage.setItem("shoes", JSON.stringify(shoes));
+      alert("Нове взуття додано!");
+      window.location.href = "index.html";
+    });
+  </script>
+</body>
+</html>
