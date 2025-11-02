@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html lang="uk">
+<head>
+  <meta charset="UTF-8">
+  <title>Редагувати взуття</title>
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+  <header class="header">
+    <div class="logo">SHOES FOR USE</div>
+    <nav class="nav">
+      <a href="index.html">Головна</a>
+    </nav>
+  </header>
+  <main>
+    <h1>Редагувати оголошення</h1>
+    <form id="editForm" class="form-container">
+      <label>Виробник:
+        <input type="text" id="manufacturer" required>
+      </label>
+      <label>Ціна (грн):
+        <input type="number" id="price" required>
+      </label>
+      <label>Розмір:
+        <input type="number" id="size" required>
+      </label>
+      <label>Колір:
+        <input type="text" id="color" required>
+      </label>
+      <label>URL зображення:
+        <input type="url" id="image" required>
+      </label>
+      <button type="submit">Зберегти зміни</button>
+    </form>
+  </main>
+  <script>
+    const shoes = JSON.parse(localStorage.getItem("shoes")) || [];
+    const index = localStorage.getItem("editIndex");
+    const shoe = shoes[index];
+
+    if (shoe) {
+      document.getElementById("manufacturer").value = shoe.manufacturer;
+      document.getElementById("price").value = shoe.price;
+      document.getElementById("size").value = shoe.size;
+      document.getElementById("color").value = shoe.color;
+      document.getElementById("image").value = shoe.image;
+    }
+
+    document.getElementById("editForm").addEventListener("submit", (e) => {
+      e.preventDefault();
+      shoes[index] = {
+        manufacturer: document.getElementById("manufacturer").value,
+        price: +document.getElementById("price").value,
+        size: +document.getElementById("size").value,
+        color: document.getElementById("color").value,
+        image: document.getElementById("image").value
+      };
+      localStorage.setItem("shoes", JSON.stringify(shoes));
+      alert("Оголошення оновлено!");
+      window.location.href = "index.html";
+    });
+  </script>
+</body>
+</html>
