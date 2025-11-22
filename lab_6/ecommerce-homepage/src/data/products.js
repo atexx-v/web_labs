@@ -1,0 +1,10 @@
+export const sneakers = [
+  { id: 1, name: "Air Max 90 Classic", price: 120, image: "https://sneakers.com.ua/image/cache/catalog/image/cache/catalog/image/catalog/image/nike/air-max-90/S-57150/62871-623x627.webp", description: "Легендарний дизайн, максимальний комфорт." },
+  { id: 2, name: "Yeezy Boost 350", price: 280, image: "https://sneakers.com.ua/image/cache/catalog/image/cache/catalog/image/catalog/image/catalog/product///yezzy350/zebra/18844-623x627.webp", description: "Обмежена серія, революційна підошва Boost." },
+  { id: 3, name: "Converse Chuck Taylor", price: 65, image: "https://sneakers.com.ua/image/cache/catalog/image/cache/catalog/image/catalog/image/converse/fks57400/24296-623x627.webp", description: "Нестаріюча класика, високий верх." },
+  { id: 4, name: "New Balance 574", price: 95, image: "https://sneakers.com.ua/image/cache/catalog/image/cache/catalog/image/catalog/image/catalog/0000-newbalance/574/zb-2359106/62099-623x627.webp", description: "Комфорт для щоденного носіння." },
+  { id: 5, name: "Puma Suede Classic", price: 70, image: "https://sneakers.com.ua/image/cache/catalog/image/cache/catalog/image/catalog/image/catalog/puma/zb-2359447/63967-623x627.webp", description: "Стильний дизайн з м'якої замші." },
+  { id: 6, name: "Asics Gel-Kayano 14", price: 160, image: "https://sneakers.com.ua/image/cache/catalog/image/cache/catalog/image/catalog/image/catalog/asics/kayano/zb-2357368/47099-623x627.webp", description: "Ідеальні для бігу, підтримка і амортизація." },
+  { id: 7, name: "Vans Old Skool", price: 60, image: "https://sneakers.com.ua/image/cache/catalog/image/cache/catalog/image/catalog/image/catalog/vans/zb-2351066/32157-623x627.webp", description: "Культовий стиль з боковою смугою." },
+  { id: 8, name: "Reebok Zig Kinetica", price: 175, image: "https://sneakers.com.ua/image/cache/catalog/image/cache/catalog/image/catalog/image/catalog/reebok/zigkinetika/zb-2358873/61177-623x627.webp", description: "Чистий ретро-дизайн з комфортом." },
+];
