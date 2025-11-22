@@ -1,34 +1,39 @@
 import React from 'react';
+import { Link } from 'react-router-dom';
 
 function ProductCard({ sneaker }) {
-  if (!sneaker) {
-    return <div className="product-card">Товар не знайдено.</div>;
-  }
+  if (!sneaker) return null;
+  
+  const sizeList = sneaker.sizes && sneaker.sizes.length > 0 
+    ? sneaker.sizes.join(', ') 
+    : 'Out of stock';
   
   return (
     <div className="product-card">
-      
-      <img src={sneaker.image} alt={sneaker.name} className="product-image"/>
+      <img src={sneaker.image} alt={sneaker.name} className="product-image" />
       
       <div className="card-body">
+        
         <h3 className="product-name">{sneaker.name}</h3>
-        <p className="product-description">{sneaker.description}</p>
+        
+        <p className="product-sizes-display">
+          {sizeList}
+        </p>
+        
         <div className="product-price-section">
           <span className="product-price">${sneaker.price}</span>
-       </div>
+        </div>
 
         <div className="card-actions">
           <button className="btn btn-add-to-cart" disabled>
-            Додати в кошик
+            ADD TO CART
           </button>
-          <button className="btn btn-details" disabled>
-            Деталі
-          </button>
+          <Link to={`/item/${sneaker.id}`} className="btn btn-details">
+            DETAILS
+          </Link>
         </div>
-        
       </div>
     </div>
   );
 }
-
 export default ProductCard;

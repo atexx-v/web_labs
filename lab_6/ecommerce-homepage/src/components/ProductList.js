@@ -1,13 +1,11 @@
 import React from 'react';
 import ProductCard from './ProductCard';
-import { sneakers } from '../data/products';
 
-
-function ProductList() {
+function ProductList({ products }) {
   return (
-    <div className="product-list-container"> 
-      <div className="product-list-grid"> 
-        {sneakers.map(sneaker => (
+    <div className="product-list-container">
+      <div className="product-list-grid">
+        {products.map(sneaker => (
           <ProductCard key={sneaker.id} sneaker={sneaker} />
         ))}
       </div>

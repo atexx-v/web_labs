@@ -1,18 +1,15 @@
 import React from 'react';
+import logo from '../assets/logo-shoes-shop.png';
 
 function Header() {
   return (
     <header className="site-header">
       <div className="header-top">
-        <h1 className="logo">SneakerShop</h1>
-        <div className="search-bar">
-          <input type="text" placeholder="Пошук моделі або бренду..." />
-          <button className="search-button">Шукати</button>
-        </div>
+        <img src={logo} alt="SHOES SHOP Logo" className="header-logo-img" />
         <div className="user-actions">
-          <button className="action-button">Профіль</button>
-          <button className="action-button">Улюблене</button>
-          <button className="action-button cart-button">Кошик</button>
+          <button className="action-button">👤 Profile</button>
+          <button className="action-button">❤️ Favorites</button>
+          <button className="action-button cart-button">🛒 Cart</button>
         </div>
       </div>
     </header>
