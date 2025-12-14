@@ -1,5 +1,6 @@
 import React from 'react';
 import logo from '../assets/logo-shoes-shop.png';
+import PrimaryButton from './PrimaryButton';
 
 function Footer() {
   return (
@@ -10,16 +11,16 @@ function Footer() {
         </div>
         <div className="footer-support">
           <h4>SUPPORT</h4>
-            <button className="support-btn">FAQ</button>
-            <button className="support-btn">Delivery</button>
-            <button className="support-btn">Returns</button>
+            <PrimaryButton className="support-btn">FAQ</PrimaryButton>
+            <PrimaryButton className="support-btn">Delivery</PrimaryButton>
+            <PrimaryButton className="support-btn">Returns</PrimaryButton>
         </div>
         
         <div className="footer-social">
           <h4>FOLLOW US</h4>
-          <button className="social-btn">Instagram</button>
-          <button className="social-btn">Telegram</button>
-          <button className="social-btn">Tik Tok</button>
+          <PrimaryButton className="social-btn">Instagram</PrimaryButton>
+          <PrimaryButton className="social-btn">Telegram</PrimaryButton>
+          <PrimaryButton className="social-btn">Tik Tok</PrimaryButton>
         </div>
       </div>
 

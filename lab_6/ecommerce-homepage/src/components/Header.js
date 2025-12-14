@@ -1,5 +1,6 @@
 import React from 'react';
 import logo from '../assets/logo-shoes-shop.png';
+import PrimaryButton from './PrimaryButton';
 
 function Header() {
   return (
@@ -7,9 +8,8 @@ function Header() {
       <div className="header-top">
         <img src={logo} alt="SHOES SHOP Logo" className="header-logo-img" />
         <div className="user-actions">
-          <button className="action-button">👤 Profile</button>
-          <button className="action-button">❤️ Favorites</button>
-          <button className="action-button cart-button">🛒 Cart</button>
+          <PrimaryButton className="action-button">👤 Profile</PrimaryButton>
+          <PrimaryButton className="action-button">❤️ Favorites</PrimaryButton>
         </div>
       </div>
     </header>

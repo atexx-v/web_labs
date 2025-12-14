@@ -1,73 +1,128 @@
-import React, { useState, useMemo } from 'react';
+import React, { useState, useEffect, useMemo } from 'react';
 import ProductList from './ProductList';
-import { sneakers } from '../data/products';
+import Select from './Select';
+import Loader from './Loader';
+import { fetchProducts } from '../services/apiService';
 
 function CatalogPage() {
+  const [products, setProducts] = useState([]);
+  const [isLoading, setIsLoading] = useState(true); 
+  const [error, setError] = useState(null);
+
   const [searchTerm, setSearchTerm] = useState('');
-  const [filterColor, setFilterColor] = useState('Color');
-  const [filterBrand, setFilterBrand] = useState('Brand');
-  const [filterSize, setFilterSize] = useState('Size');
+  const [filterColor, setFilterColor] = useState('');
+  const [filterBrand, setFilterBrand] = useState('');
+  const [filterSize, setFilterSize] = useState('');
 
-  const allSizes = sneakers.flatMap(s => s.sizes || []);
-  const uniqueSizes = new Set(allSizes);
-  const availableSizes = ['Size', ...Array.from(uniqueSizes).sort((a, b) => a - b)];
+  useEffect(() => {
+    const loadProducts = async () => {
+      setIsLoading(true);
+      setError(null);
 
-  const uniqueBrands = new Set(sneakers.map(s => s.brand).filter(Boolean));
-  const availableBrands = ['Brand', ...uniqueBrands];
-  const uniqueColors = new Set(sneakers.map(s => s.color).filter(Boolean));
-  const availableColors = ['Color', ...uniqueColors];
+      const currentFilters = {
+        search: searchTerm,
+        brand: filterBrand,
+        size: filterSize,
+        color: filterColor,
+      };
+
+      try {
+        // AXIOS-СЕРВІС
+        const data = await fetchProducts(currentFilters);
+        setProducts(data);
+        if (data.length === 0) {
+             setError("Products not found for your query");
+        }
+      } catch (err) {
+        setError("Failed to load products. Check backend server");
+      } finally {
+        setIsLoading(false); 
+      }
+    };
+
+    const debounceTimeout = setTimeout(() => {
+        loadProducts();
+    }, 500); 
+
+    return () => clearTimeout(debounceTimeout);
+    
+  }, [searchTerm, filterBrand, filterSize, filterColor]);
 
 
-  const filteredProducts = useMemo(() => {
-    const selectedSize = filterSize === 'Size' ? null : parseInt(filterSize);
-    return sneakers.filter(sneaker => {
-      
-      const colorMatch = filterColor === 'Color' || sneaker.color === filterColor;
-      const brandMatch = filterBrand === 'Brand' || sneaker.brand === filterBrand;
-      const sizeMatch = selectedSize === null || 
-                        (sneaker.sizes && sneaker.sizes.includes(selectedSize));
-
-      const searchMatch = sneaker.name.toLowerCase().includes(searchTerm.toLowerCase());
-      
-      return colorMatch && brandMatch && sizeMatch && searchMatch; 
+  const availableOptions = useMemo(() => {
+    const allBrands = new Set();
+    const allColors = new Set();
+    const allSizes = new Set();
+    
+    (products || []).forEach(p => { 
+        if (p.brand) allBrands.add(p.brand);
+        if (p.color) allColors.add(p.color);
+        if (p.sizes && Array.isArray(p.sizes)) {
+            p.sizes.forEach(size => allSizes.add(size));
+        }
     });
-  }, [searchTerm, filterColor, filterBrand, filterSize]);
+
+    return {
+        brands: Array.from(allBrands),
+        colors: Array.from(allColors),
+        sizes: Array.from(allSizes).sort((a, b) => a - b)
+    };
+  }, [products]);
+
 
   return (
-    <div>      
+    <div className="catalog-page">
+      
       <div className="filter-controls">
         <input
           type="text"
-          placeholder="Search by name..."
+          placeholder="Пошук за назвою..."
           value={searchTerm}
           onChange={(e) => setSearchTerm(e.target.value)}
+          className="search-input"
         />
         
-        <select value={filterColor} onChange={(e) => setFilterColor(e.target.value)}>
-          {availableColors.map(color => (
-            <option key={color} value={color}>{color}</option>
-          ))}
-        </select>
+        <Select 
+          label="Бренд"
+          name="brand"
+          value={filterBrand}
+          onChange={(e) => setFilterBrand(e.target.value)}
+          options={['', ...availableOptions.brands]}
+          className="filter-select"
+        />
+        
+        <Select 
+          label="Колір"
+          name="color"
+          value={filterColor}
+          onChange={(e) => setFilterColor(e.target.value)}
+          options={['', ...availableOptions.colors]}
+          className="filter-select"
+        />
 
-        <select value={filterBrand} onChange={(e) => setFilterBrand(e.target.value)}>
-          {availableBrands.map(brand => (
-            <option key={brand} value={brand}>{brand}</option>
-          ))}
-        </select>
-
-        <select value={filterSize} onChange={(e) => setFilterSize(e.target.value)}>
-          {availableSizes.map(size => (
-            <option key={size} value={size}>{size}</option>
-          ))}
-        </select>
+        <Select 
+          label="Розмір"
+          name="size"
+          value={filterSize}
+          onChange={(e) => setFilterSize(e.target.value)}
+          options={['', ...availableOptions.sizes]}
+          className="filter-select"
+        />
       </div>
       
-      {filteredProducts.length > 0 ? (
-        <ProductList products={filteredProducts} /> 
+      {isLoading ? (
+        <Loader />
+      ) : error ? (
+        <p style={{textAlign: 'center', color: 'red'}}>Error: {error}</p>
+      ) : products.length > 0 ? (
+        <ProductList sneakers={products} />
       ) : (
-        <p>На жаль, за вашим запитом товари не знайдено.</p>
+        <p style={{textAlign: 'center', marginTop: '40px', color: 'var(--primary-color)'}}>
+          Products not found
+        </p>
       )}
     </div>
   );
 }
+
 export default CatalogPage;

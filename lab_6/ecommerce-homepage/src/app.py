@@ -1,0 +1,70 @@
+from flask import Flask, jsonify, request
+from flask_cors import CORS
+import json
+
+MOCK_SNEAKERS = [
+  { "id": 1, "brand": "Nike", "name": "Nike Air Max 90 Classic", "sizes": [41, 42, 43, 44], "price": 120, "image": "https://sneakers.com.ua/image/cache/catalog/image/cache/catalog/image/catalog/image/nike/air-max-90/S-57150/62871-623x627.webp", "description": "LEGENDARY DESIGN, MAXIMUM COMFORT.", "color": "Black"},
+  { "id": 2, "brand": "Adidas", "name": "Adidas Yeezy Boost 350", "sizes": [41, 42, 43, 44], "price": 280, "image": "https://sneakers.com.ua/image/cache/catalog/image/cache/catalog/image/catalog/image/catalog/product///yezzy350/zebra/18844-623x627.webp", "description": "LIMITED EDITION, REVOLUTIONARY BOOST SOLE.", "color": "Gray"},
+  { "id": 3, "brand": "Converse", "name": "Converse Chuck Taylor", "sizes": [36, 37, 38], "price": 65, "image": "https://sneakers.com.ua/image/cache/catalog/image/cache/catalog/image/catalog/image/converse/fks57400/24296-623x627.webp", "description": "TIMELESS CLASSIC, HIGH TOP.", "color": "Black" },
+  { "id": 4, "brand": "New Balance", "name": "New Balance 574", "sizes": [41, 42, 43, 44], "price": 95, "image": "https://sneakers.com.ua/image/cache/catalog/image/cache/catalog/image/catalog/image/catalog/0000-newbalance/574/zb-2359106/62099-623x627.webp", "description": "COMFORT FOR EVERYDAY WEAR.", "color": "Gray" },
+  { "id": 5, "brand": "Puma", "name": "Puma Suede Classic", "sizes": [41, 42, 44], "price": 70, "image": "https://sneakers.com.ua/image/cache/catalog/image/cache/catalog/image/catalog/image/catalog/puma/zb-2359447/63967-623x627.webp", "description": "STYLISH DESIGN WITH SOFT SUEDE", "color": "Brown" },
+  { "id": 6, "brand": "Asics", "name": "Asics Gel-Kayano 14", "sizes": [41, 42, 43, 44], "price": 160, "image": "https://sneakers.com.ua/image/cache/catalog/image/cache/catalog/image/catalog/image/catalog/asics/kayano/zb-2357368/47099-623x627.webp", "description": "PERFECT FOR RUNNING, SUPPORT AND CUSHIONING.", "color": "Gray" },
+  { "id": 7, "brand": "Vans", "name": "Vans Old Skool", "sizes": [36, 37, 38, 39], "price": 60, "image": "https://sneakers.com.ua/image/cache/catalog/image/cache/catalog/image/catalog/image/catalog/vans/zb-2351066/32157-623x627.webp", "description": "CULT ICONIC STYLE WITH SIDE STRIPE.", "color": "Black" },
+  { "id": 8, "brand": "Reebok", "name": "Reebok Zig Kinetica", "sizes": [41, 42, 43], "price": 175, "image": "https://sneakers.com.ua/image/cache/catalog/image/cache/catalog/image/catalog/image/catalog/reebok/zigkinetika/zb-2358873/61177-623x627.webp", "description": "CLEAR RETRO-DESIGN WITH COMFORT.", "color": "Black" },
+  { "id": 9, "brand": "Nike", "name": "Nike Air Force 1 Low", "sizes": [41, 43, 44], "price": 150, "image": "https://sneakers.com.ua/image/cache/catalog/image/cache/catalog/image/catalog/image/catalog/airforce/low/zb-2358722/57287-623x627.webp", "description": "ENERGY RETURN TECHNOLOGY FOR RUNNERS.", "color": "White" },
+  { "id": 10, "brand": "Nike", "name": "Nike Air Force 1 Low x NOCTA", "sizes": [36, 37, 38, 39], "price": 80, "image": "https://sneakers.com.ua/image/cache/catalog/image/cache/catalog/image/catalog/image/catalog/airforce/low/zb-2358815/57789-623x627.webp", "description": "BOLD DESIGN WITH CHUNKY SOLE.", "color": "White" },
+  { "id": 11, "brand": "Jordan", "name": "Jordan 4 Retro University", "sizes": [41, 42, 43, 44], "price": 200, "image": "https://sneakers.com.ua/image/cache/catalog/image/cache/catalog/image/catalog/image/nike/jordan/jordan4/fks56331/24651-623x627.webp", "description": "ICONIC BASKETBALL STYLE WITH PREMIUM MATERIALS.", "color": "Blue" },
+  { "id": 12, "brand": "Nike", "name": "Nike Air Force 1 Low", "sizes": [41, 42, 43], "price": 175, "image": "https://sneakers.com.ua/image/cache/catalog/image/cache/catalog/image/catalog/image/catalog/airforce/low/zb-2359005/61553-623x627.webp", "description": "RETRO STYLE WITH MODERN COMFORT.", "color": "Multycolor" },
+  { "id": 13, "brand": "Adidas", "name": "Adidas Superstar", "sizes": [36, 37, 38, 39], "price": 85, "image": "https://sneakers.com.ua/image/cache/catalog/image/cache/catalog/image/catalog/image/catalog/product////adidas/superstar/cloudwhite/19697-623x627.webp", "description": "CLASSIC SHELL TOE DESIGN.", "color": "White" },
+  { "id": 14, "brand": "Nike", "name": "Nike Dunk", "sizes": [41, 42, 43, 44], "price": 90, "image": "https://sneakers.com.ua/image/cache/catalog/image/cache/catalog/image/catalog/image/nike/dunk/s-56604/62860-623x627.webp", "description": "BOLD CHUNKY SOLE FOR A STATEMENT LOOK.", "color": "White" },
+  { "id": 15, "brand": "Asics", "name": "Asics Gel-NYC", "sizes": [41, 42, 43], "price": 140, "image": "https://sneakers.com.ua/image/cache/catalog/image/cache/catalog/image/catalog/image/asics/fks2351716/21074-623x627.webp", "description": "ENERGY RETURN TECHNOLOGY FOR RUNNERS.", "color": "Black" },
+  { "id": 16, "brand": "Puma", "name": "Puma Suede Classic", "sizes": [41, 42, 43, 44], "price": 110, "image": "https://sneakers.com.ua/image/cache/catalog/image/cache/catalog/image/catalog/image/catalog/puma/other/zb-2358756/57454-623x627.webp", "description": "BOLD DESIGN WITH CHUNKY SOLE.", "color": "White" },
+]
+
+app = Flask(__name__)
+CORS(app, resources={r"/api/*": {"origins": "*"}})
+
+
+@app.route('/api/products', methods=['GET'])
+def get_products():
+    
+    filters = request.args
+    filtered_list = MOCK_SNEAKERS
+    
+    search_term = filters.get('search', '').lower()
+    if search_term:
+        filtered_list = [
+            s for s in filtered_list 
+            if search_term in s['name'].lower() or search_term in s['description'].lower()
+        ]
+  
+    brand_filter = filters.get('brand')
+    if brand_filter:
+        filtered_list = [
+            s for s in filtered_list 
+            if s.get('brand') == brand_filter
+        ]
+    
+    size_filter = filters.get('size')
+    if size_filter:
+        try:
+            size_filter = int(size_filter)
+            filtered_list = [
+                s for s in filtered_list 
+                if size_filter in s.get('sizes', [])
+            ]
+        except ValueError:
+            pass
+      
+    color_filter = filters.get('color')
+    if color_filter:
+        filtered_list = [
+            s for s in filtered_list 
+            if s.get('color') == color_filter
+        ]
+    
+    return jsonify(filtered_list)
+
+
+if __name__ == '__main__':
+    app.run(debug=True, port=3000)

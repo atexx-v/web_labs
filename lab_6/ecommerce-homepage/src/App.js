@@ -1,10 +1,11 @@
 import React from 'react';
-import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
+import { BrowserRouter as Router, Routes, Route } from 'react-router-dom'; 
+
 import Header from './components/Header';
 import Navigation from './components/Navigation';
 import Footer from './components/Footer';
 
-import Home from './components/Home';
+import HomePage from './components/Home'; 
 import CatalogPage from './components/CatalogPage';
 import ItemPage from './components/ItemPage';
 
@@ -19,10 +20,12 @@ function App() {
         
         <main className="main-content">
           <Routes>
-            <Route path="/" element={<Home />} />
+            <Route path="/" element={<HomePage />} /> 
+            
             <Route path="/catalog" element={<CatalogPage />} />
-            <Route path="/item/:id" element={<ItemPage />} />
-            <Route path="*" element={<h1 style={{textAlign: 'center'}}>404: Сторінка не знайдена</h1>} />
+            
+            <Route path="/item/:id" element={<ItemPage />} /> 
+            
           </Routes>
         </main>
 

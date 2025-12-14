@@ -1,5 +1,6 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
+import PrimaryButton from './PrimaryButton';
 
 function ProductCard({ sneaker }) {
   if (!sneaker) return null;
@@ -25,9 +26,9 @@ function ProductCard({ sneaker }) {
         </div>
 
         <div className="card-actions">
-          <button className="btn btn-add-to-cart" disabled>
+          <PrimaryButton className="btn btn-add-to-cart" disabled>
             ADD TO CART
-          </button>
+          </PrimaryButton>
           <Link to={`/item/${sneaker.id}`} className="btn btn-details">
             DETAILS
           </Link>
